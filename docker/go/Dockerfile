@@ -6,5 +6,6 @@ COPY . /go/src/app
 # ワーキングディレクトリの設定
 WORKDIR /go/src/app/server
 RUN go build
-
-CMD go run main.go
+# ホットリロード用のapps「air」の導入
+RUN go install github.com/cosmtrek/air@latest
+CMD air
