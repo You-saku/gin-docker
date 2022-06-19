@@ -43,5 +43,27 @@ func main() {
 		})
 	})
 
+	sampleGroup := r.Group("/api") // APIのグループ化
+	sampleGroup.Use(sampleMiddleware()) // ミドルウェアを設定
+	sampleGroup.GET("/ok", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "API!!",
+			})
+		})
+
 	r.Run(":80")
+}
+
+// 自作のミドルウェア
+func sampleMiddleware() gin.HandlerFunc {
+    return func(c *gin.Context) {
+
+		flag := c.Request.Header["Variable"][0] // headerのkeyがなぜか配列でくる
+		if(flag == "yes") {
+			c.JSON(400, gin.H{"message": "NotFound."})
+			c.Abort()
+		}
+		
+		c.Next()
+	}
 }
